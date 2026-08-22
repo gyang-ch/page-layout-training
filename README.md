@@ -128,6 +128,24 @@ with the CUDA `torch.cumsum` operation used by DINO positional encoding in the
 supported PyTorch stack. Use the same seed, software environment, and GPU type
 for all learning-curve runs, and record this limitation in the experiment log.
 
+For the final learning-curve experiment, the runtime generator defaults to
+MMDetection's official 24-epoch DINO schedule (learning-rate decay at epoch 20).
+Run YOLO for 100 epochs with early stopping disabled. These fixed schedules
+ensure every subset in a model family receives the same number of data passes;
+the best validation checkpoint is retained for final evaluation.
+
+Run all 12 jobs sequentially, alternating YOLO and DINO at each subset size:
+
+```bash
+cd /workspace/page-layout-training
+./scripts/run_training_queue.sh
+```
+
+The queue is resumable. It skips runs bearing a `.training_complete` marker and
+resumes interrupted YOLO or DINO jobs from their latest checkpoint. Override
+defaults with environment variables, for example `YOLO_BATCH=4` or
+`DINO_AMP=0`, if required by the GPU environment.
+
 The DINO overlays use the corresponding subset JSON while all six experiments
 share `images/train/`. Validation and testing use the original fixed COCO JSONs.
 

@@ -30,6 +30,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=DEFAULT_SEED)
     parser.add_argument("--dino-batch-size", type=int, default=2)
     parser.add_argument("--dino-num-workers", type=int, default=2)
+    parser.add_argument("--dino-max-epochs", type=int, default=24)
+    parser.add_argument("--dino-lr-milestone", type=int, default=20)
     parser.add_argument(
         "--runtime-root",
         type=Path,
@@ -50,6 +52,11 @@ def main() -> None:
     if bool(args.dino_base_config) != bool(args.dino_checkpoint):
         raise ValueError(
             "--dino-base-config and --dino-checkpoint must be supplied together"
+        )
+    if not 0 < args.dino_lr_milestone < args.dino_max_epochs:
+        raise ValueError(
+            "--dino-lr-milestone must be greater than zero and less than "
+            "--dino-max-epochs"
         )
     verify_command = [
         sys.executable,
@@ -127,6 +134,20 @@ resume = False
 # which has no deterministic CUDA implementation in the supported Torch stack.
 randomness = dict(seed={args.seed}, deterministic=False)
 
+# Use MMDetection's official DINO 24-epoch (2x) schedule by default. Keeping
+# this schedule identical across subset sizes is important for the comparison.
+max_epochs = {args.dino_max_epochs}
+train_cfg = dict(
+    type='EpochBasedTrainLoop', max_epochs=max_epochs, val_interval=1)
+param_scheduler = [dict(
+    type='MultiStepLR',
+    begin=0,
+    end=max_epochs,
+    by_epoch=True,
+    milestones=[{args.dino_lr_milestone}],
+    gamma=0.1,
+)]
+
 train_dataloader = dict(
     batch_size={args.dino_batch_size},
     num_workers={args.dino_num_workers},
@@ -160,8 +181,7 @@ test_dataloader = dict(
 val_evaluator = dict(ann_file={py_string(valid_json)})
 test_evaluator = dict(ann_file={py_string(test_json)})
 
-# The inherited official 12-epoch configuration validates every epoch and
-# decays the learning rate at epoch 11. Save the best validation COCO mAP model.
+# Validate every epoch and save the best validation COCO mAP model.
 default_hooks = dict(checkpoint=dict(
     type='CheckpointHook',
     interval=1,
