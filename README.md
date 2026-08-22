@@ -102,12 +102,15 @@ Repeat with `train_400.yaml` through `train_1152.yaml`. Every generated YOLO
 configuration points validation and testing at the original fixed directories.
 
 For DINO, first clone/install the MMDetection version you intend to use and
-identify its DINO model config. Generate overlay configs that inherit from it:
+identify its DINO model config. Download the matching COCO-pretrained checkpoint,
+then generate overlay configs that inherit from the base configuration:
 
 ```bash
 python3 scripts/prepare_runtime.py \
   --dataset-root /workspace/datasets/page-layout-v2 \
-  --dino-base-config /workspace/mmdetection/configs/dino/dino-4scale_r50_8xb2-12e_coco.py
+  --dino-base-config /workspace/mmdetection/configs/dino/dino-4scale_r50_8xb2-12e_coco.py \
+  --dino-checkpoint /workspace/models/dino-4scale_r50_12e_coco.pth \
+  --seed 20260822
 ```
 
 Then train from the MMDetection checkout, for example:
