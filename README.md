@@ -122,6 +122,12 @@ python tools/train.py \
   --work-dir /workspace/outputs/dino/train_200_seed_20260822
 ```
 
+The generated DINO overlays keep the requested random seed but set
+`randomness.deterministic=False`. Strict deterministic mode is incompatible
+with the CUDA `torch.cumsum` operation used by DINO positional encoding in the
+supported PyTorch stack. Use the same seed, software environment, and GPU type
+for all learning-curve runs, and record this limitation in the experiment log.
+
 The DINO overlays use the corresponding subset JSON while all six experiments
 share `images/train/`. Validation and testing use the original fixed COCO JSONs.
 

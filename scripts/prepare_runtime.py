@@ -122,7 +122,10 @@ metainfo = dict(classes=('illustration', 'text_block'))
 model = dict(bbox_head=dict(num_classes=2))
 load_from = {py_string(checkpoint)}
 resume = False
-randomness = dict(seed={args.seed}, deterministic=True)
+# Keep the experiment seed fixed. Strict deterministic algorithms cannot be
+# enabled here because DINO's CUDA positional encoding uses torch.cumsum,
+# which has no deterministic CUDA implementation in the supported Torch stack.
+randomness = dict(seed={args.seed}, deterministic=False)
 
 train_dataloader = dict(
     batch_size={args.dino_batch_size},
