@@ -1,0 +1,92 @@
+{
+  "subsets": {
+    "200": {
+      "manifest_images": 200,
+      "manifest_duplicates": 0,
+      "yolo_images": 200,
+      "yolo_labels": 200,
+      "yolo_all_images_have_labels": true,
+      "coco_images": 200,
+      "coco_annotations": 719,
+      "same_yolo_coco_filenames": true
+    },
+    "400": {
+      "manifest_images": 400,
+      "manifest_duplicates": 0,
+      "yolo_images": 400,
+      "yolo_labels": 400,
+      "yolo_all_images_have_labels": true,
+      "coco_images": 400,
+      "coco_annotations": 1520,
+      "same_yolo_coco_filenames": true
+    },
+    "600": {
+      "manifest_images": 600,
+      "manifest_duplicates": 0,
+      "yolo_images": 600,
+      "yolo_labels": 600,
+      "yolo_all_images_have_labels": true,
+      "coco_images": 600,
+      "coco_annotations": 2192,
+      "same_yolo_coco_filenames": true
+    },
+    "800": {
+      "manifest_images": 800,
+      "manifest_duplicates": 0,
+      "yolo_images": 800,
+      "yolo_labels": 800,
+      "yolo_all_images_have_labels": true,
+      "coco_images": 800,
+      "coco_annotations": 3008,
+      "same_yolo_coco_filenames": true
+    },
+    "1000": {
+      "manifest_images": 1000,
+      "manifest_duplicates": 0,
+      "yolo_images": 1000,
+      "yolo_labels": 1000,
+      "yolo_all_images_have_labels": true,
+      "coco_images": 1000,
+      "coco_annotations": 3678,
+      "same_yolo_coco_filenames": true
+    },
+    "1152": {
+      "manifest_images": 1152,
+      "manifest_duplicates": 0,
+      "yolo_images": 1152,
+      "yolo_labels": 1152,
+      "yolo_all_images_have_labels": true,
+      "coco_images": 1152,
+      "coco_annotations": 4246,
+      "same_yolo_coco_filenames": true
+    }
+  },
+  "nested": true,
+  "inconsistencies": [],
+  "seed": 20260822,
+  "subset_sizes": [
+    200,
+    400,
+    600,
+    800,
+    1000,
+    1152
+  ],
+  "source_split_counts": {
+    "train": {
+      "images": 1152,
+      "coco_annotations": 4246
+    },
+    "valid": {
+      "images": 248,
+      "coco_annotations": 1060
+    },
+    "test": {
+      "images": 263,
+      "coco_annotations": 616
+    }
+  },
+  "source_exports_correspond": true,
+  "source_exports_unchanged": true,
+  "validation_and_test_unchanged": true
+}

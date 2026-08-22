@@ -1,0 +1,27 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.sas
+
+# Downloaded datasets and generated runtime paths
+data/
+datasets/
+.runtime/
+
+# Training artifacts and model weights
+runs/
+outputs/
+checkpoints/
+work_dirs/
+wandb/
+*.pt
+*.pth
+*.ckpt
+
+# Python/editor/OS artifacts
+__pycache__/
+*.py[cod]
+.DS_Store
+.idea/
+.vscode/
