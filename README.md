@@ -146,6 +146,18 @@ resumes interrupted YOLO or DINO jobs from their latest checkpoint. Override
 defaults with environment variables, for example `YOLO_BATCH=4` or
 `DINO_AMP=0`, if required by the GPU environment.
 
+After all training decisions are final, evaluate each best validation-selected
+checkpoint once on the fixed test split:
+
+```bash
+cd /workspace/page-layout-training
+./scripts/run_test_evaluation_queue.sh
+```
+
+Test outputs are written under `/workspace/outputs/test/`. The queue saves native
+metrics, plots, and prediction files and uses `.evaluation_complete` markers so
+it can be safely restarted. It does not use test scores to select checkpoints.
+
 The DINO overlays use the corresponding subset JSON while all six experiments
 share `images/train/`. Validation and testing use the original fixed COCO JSONs.
 
