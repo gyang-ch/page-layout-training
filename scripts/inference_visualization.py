@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -14,11 +15,20 @@ CLASS_COLORS = {0: (0, 114, 178), 1: (213, 94, 0)}
 
 
 def discover_images(root: Path) -> list[Path]:
-    """Return a stable recursive list while retaining book subdirectories."""
-    images = sorted(
-        path for path in root.rglob("*")
-        if path.is_file() and path.suffix.lower() in IMAGE_SUFFIXES
-    )
+    """Return a stable recursive list while retaining book subdirectories.
+
+    ``os.walk(..., followlinks=True)`` is intentional: external-corpus queues
+    can stage selected book directories as symlinks without copying images.
+    """
+    images = []
+    for directory, _, filenames in os.walk(root, followlinks=True):
+        directory_path = Path(directory)
+        images.extend(
+            directory_path / filename
+            for filename in filenames
+            if Path(filename).suffix.lower() in IMAGE_SUFFIXES
+        )
+    images.sort()
     if not images:
         raise ValueError(f"No supported images found under {root}")
     return images
@@ -76,4 +86,3 @@ def draw_predictions(
 
     destination.parent.mkdir(parents=True, exist_ok=True)
     image.save(destination, quality=92, optimize=True)
-
